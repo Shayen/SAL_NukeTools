@@ -1,0 +1,3 @@
+[submodule "renderthreads"]
+	path = renderthreads
+	url = https://github.com/Shayen/renderthreads
