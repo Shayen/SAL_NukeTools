@@ -5,6 +5,7 @@ import sys, os, traceback
 import nuke
 
 sys.path.append('P:/_studioTool')
+#sys.path.append('D:/WORK/Programming/project')
 modulepath = os.path.dirname(__file__) + '/'
 
 try:
@@ -51,6 +52,12 @@ def layerSplitter():
 	reload (layerSplitter)
 	layerSplitter.run()
 
+def autoWrite():
+
+	import autoWrite_nuke
+	reload(autoWrite_nuke)
+	autoWrite_nuke.run()
+
 
 fileManager = "from sal_pipeline.app import projectExplorer_nuke \nreload(projectExplorer_nuke)\napp = projectExplorer_nuke.nuke_projectExplorer( )\napp.ui.show()"
 # channelSplitter = 
@@ -58,4 +65,5 @@ fileManager = "from sal_pipeline.app import projectExplorer_nuke \nreload(projec
 nuke.menu('Nuke').addCommand('SAL Tools/File manager', fileManager)
 nuke.menu('Nuke').addCommand('SAL Tools/Layers splitter', "layerSplitter()")
 nuke.menu('Nuke').addCommand('SAL Tools/Renderthread',"loadRenderThread()")
+nuke.menu('Nuke').addCommand('SAL Tools/AutoWrite',"autoWrite()")
 print ("Add 'SAL tools' menu")
