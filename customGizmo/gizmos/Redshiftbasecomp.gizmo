@@ -1,0 +1,267 @@
+#! D:/Program Files/Nuke10.5v2/nuke-10.5.2.dll -nx
+version 10.5 v2
+Gizmo {
+ inputs 2
+ tile_color 0x1fff00ff
+ gl_color 0xe9ff55ff
+ label "Base compositing  "
+ lifetimeStart 1
+ lifetimeEnd 100
+ addUserKnob {20 Weight_value l "weight value"}
+ addUserKnob {41 multiply l "diffuse value" T Grade_diffuseLighting.multiply}
+ addUserKnob {41 multiply_1 l "Reflections value" T Grade_Reflections.multiply}
+ addUserKnob {41 multiply_2 l "Refractions value" T Grade_Refractions.multiply}
+ addUserKnob {41 multiply_3 l "SSS value" T Grade_SSS.multiply}
+ addUserKnob {41 multiply_4 l "Sapecular value" T Grade_SpecularLing.multiply}
+ addUserKnob {41 multiply_6 l "GI value" T Grade_GI.multiply}
+ addUserKnob {41 multiply_5 l "caustics value" T Grade_Caustics.multiply}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 Description_Node l "" +STARTLINE T "redshift base composite by KRONGFX V1"}
+}
+ Input {
+  inputs 0
+  name Mask
+  xpos 1118
+  ypos 499
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 411
+  ypos -218
+ }
+ Dot {
+  name Dot1
+  xpos 445
+  ypos -41
+ }
+set Nae747c00 [stack 0]
+ Dot {
+  name Dot3
+  xpos 589
+  ypos -41
+ }
+set Nae747800 [stack 0]
+ Dot {
+  name Dot4
+  xpos 738
+  ypos -41
+ }
+set Nae747400 [stack 0]
+ Dot {
+  name Dot5
+  xpos 891
+  ypos -41
+ }
+set Nae747000 [stack 0]
+ Dot {
+  name Dot6
+  xpos 1041
+  ypos -42
+ }
+set Nae746c00 [stack 0]
+ Dot {
+  name Dot2
+  xpos 1192
+  ypos -45
+ }
+set Nae746800 [stack 0]
+ Dot {
+  name Dot10
+  xpos 1354
+  ypos -45
+ }
+set Naf57ac00 [stack 0]
+ Dot {
+  name Dot9
+  xpos 1510
+  ypos -45
+ }
+ Dot {
+  name Dot8
+  xpos 1510
+  ypos 406
+ }
+push $Nae747c00
+add_layer {DiffuseLighting DiffuseLighting.red DiffuseLighting.green DiffuseLighting.blue}
+ Shuffle {
+  in DiffuseLighting
+  name Shuffle1
+  label "\[knob in]"
+  xpos 411
+  ypos 27
+  postage_stamp true
+ }
+ Grade {
+  name Grade_diffuseLighting
+  xpos 411
+  ypos 190
+ }
+ Dot {
+  name Dot7
+  xpos 445
+  ypos 285
+ }
+push $Nae747800
+add_layer {Reflections Reflections.red Reflections.green Reflections.blue}
+ Shuffle {
+  in Reflections
+  name Shuffle2
+  label "\[knob in]"
+  xpos 555
+  ypos 27
+  postage_stamp true
+ }
+ Grade {
+  name Grade_Reflections
+  xpos 555
+  ypos 187
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge1
+  xpos 555
+  ypos 281
+ }
+push $Nae747400
+add_layer {Refractions Refractions.red Refractions.green Refractions.blue}
+ Shuffle {
+  in Refractions
+  name Shuffle3
+  label "\[knob in]"
+  xpos 704
+  ypos 27
+  postage_stamp true
+ }
+ Grade {
+  name Grade_Refractions
+  xpos 704
+  ypos 185
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos 704
+  ypos 281
+ }
+push $Nae747000
+add_layer {SSS SSS.red SSS.green SSS.blue}
+ Shuffle {
+  in SSS
+  name Shuffle4
+  label "\[knob in]"
+  xpos 857
+  ypos 27
+  postage_stamp true
+ }
+ Grade {
+  name Grade_SSS
+  xpos 857
+  ypos 184
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge3
+  xpos 857
+  ypos 281
+ }
+push $Nae746c00
+add_layer {SpecularLighting SpecularLighting.red SpecularLighting.green SpecularLighting.blue}
+ Shuffle {
+  in SpecularLighting
+  name Shuffle5
+  label "\[knob in]"
+  xpos 1007
+  ypos 28
+  postage_stamp true
+ }
+ Grade {
+  name Grade_SpecularLing
+  xpos 1007
+  ypos 180
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos 1007
+  ypos 281
+ }
+push $Nae746800
+add_layer {GI GI.red GI.green GI.blue}
+ Shuffle {
+  in GI
+  name Shuffle6
+  label "\[knob in]"
+  selected true
+  xpos 1158
+  ypos 32
+  postage_stamp true
+ }
+ Grade {
+  name Grade_GI
+  xpos 1158
+  ypos 178
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge5
+  xpos 1158
+  ypos 281
+ }
+push $Naf57ac00
+add_layer {Caustics Caustics.red Caustics.green Caustics.blue}
+ Shuffle {
+  in Caustics
+  name Shuffle7
+  label "\[knob in]"
+  xpos 1320
+  ypos 38
+  postage_stamp true
+ }
+ Grade {
+  name Grade_Caustics
+  xpos 1320
+  ypos 174
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge6
+  xpos 1320
+  ypos 281
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 1320
+  ypos 396
+ }
+set N99e23400 [stack 0]
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge7
+  xpos 1320
+  ypos 499
+ }
+ Output {
+  name Output1
+  xpos 1320
+  ypos 670
+ }
+push $N99e23400
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos 734
+  ypos 560
+ }
+end_group

@@ -1,0 +1,195 @@
+#! C:/Program Files/Nuke10.5v4/nuke-10.5.4.dll -nx
+#write_info Write_GOP file:"[value parent.Folder][value parent.FileName]_%07d.[value parent.FileExt]" format:"1920 1080 1" chans:":rgba.red:rgba.green:rgba.blue:rgba.alpha:" framerange:"1 20" fps:"0" colorspace:"default (sRGB)" datatype:"12 bit" transfer:"(auto detect)" views:"main" colorManagement:"Nuke"
+version 10.5 v4
+Gizmo {
+ help "Global Output Gizmo."
+ tile_color 0xff0000ff
+ label "\[value Mode]"
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_size 13
+ addUserKnob {20 General}
+ addUserKnob {26 Class_GlobalOutput l INVISIBLE +INVISIBLE}
+ addUserKnob {4 Mode M {precomp out online "" ""}}
+ Mode online
+ addUserKnob {41 disable_1 l "Crop Disable" -STARTLINE T Crop.disable}
+ addUserKnob {26 separator0 l "" +STARTLINE}
+ addUserKnob {41 Channel_IN l "Channel In" t "Select what layer you want to render out \"rgba\" \"ID\" \"Depth\" \"etc\"" T Shuffle_Channel.in}
+ addUserKnob {41 channels l "Channels Out" t "Select output type \"rgba\" or \"rgb\"" T Write_GOP.channels}
+ addUserKnob {41 first l "Frame Range" T Write_GOP.first}
+ addUserKnob {41 last l "" -STARTLINE T Write_GOP.last}
+ addUserKnob {41 use_limit l "Limit to Range" -STARTLINE T Write_GOP.use_limit}
+ addUserKnob {26 separator4 l "" +STARTLINE}
+ addUserKnob {1 PassName l "Pass Name"}
+ PassName comp
+ addUserKnob {26 separator1 l "" +STARTLINE}
+ addUserKnob {20 G_GlobalOutput l "Output Override and Preview" n 1}
+ addUserKnob {26 txt_Overrides l "" +STARTLINE T Overrides}
+ addUserKnob {2 ProjectDir l "Project Dir."}
+ ProjectDir Z:/GANZBERG_ROLLERCOASTER/
+ addUserKnob {22 SetProjAll l "Set All" -STARTLINE T "sValue = nuke.thisNode().knob('ProjectDir').value()\n\nfor gp in nuke.allNodes('Group', nuke.root()): # Loop All Group Node\n    gp.knob('Enable_ProjDir').setValue(1)\n    gp.knob('ProjectDir').setValue(sValue)\n\nfor gm in nuke.allNodes('Global_Output', nuke.root()): # Loop All Global_Output Node\n    gm.knob('Enable_ProjDir').setValue(1)\n    gm.knob('ProjectDir').setValue(sValue)"}
+ addUserKnob {1 Version}
+ Version 60s
+ addUserKnob {22 SetVersionAll l "Set All" -STARTLINE T "sValue = nuke.thisNode().knob('Version').value()\n\nfor gp in nuke.allNodes('Group', nuke.root()): # Loop All Group Node\n    gp.knob('Enable_Version').setValue(1)\n    gp.knob('Version').setValue(sValue)\n\nfor gm in nuke.allNodes('Global_Output', nuke.root()): # Loop All Global_Output Node\n    gm.knob('Enable_Version').setValue(1)\n    gm.knob('Version').setValue(sValue)"}
+ addUserKnob {1 Shot}
+ Shot Sh08
+ addUserKnob {22 SetShotAll l "Set All" -STARTLINE T "sValue = nuke.thisNode().knob('Shot').value()\n\nfor gp in nuke.allNodes('Group', nuke.root()): # Loop All Group Node\n    gp.knob('Enable_Shot').setValue(1)\n    gp.knob('Shot').setValue(sValue)\n\nfor gm in nuke.allNodes('Global_Output', nuke.root()): # Loop All Global_Output Node\n    gm.knob('Enable_Shot').setValue(1)\n    gm.knob('Shot').setValue(sValue)"}
+ addUserKnob {1 DateTime l "Date Time"}
+ DateTime 2017_10_07
+ addUserKnob {22 SetDateTimeAll l "Set All  " -STARTLINE T "import re , string, os\nfrom datetime import datetime, date, time\n\nsValue = datetime.now().strftime(\"%y%m%d_%H%M\")\n\nfor gp in nuke.allNodes('Group', nuke.root()): # Loop All Group Node\n    gp.knob('Enable_DateTime').setValue(1)\n    gp.knob('DateTime').setValue(sValue)\n\nfor gm in nuke.allNodes('Global_Output', nuke.root()): # Loop All Global_Output Node\n    gm.knob('Enable_DateTime').setValue(1)\n    gm.knob('DateTime').setValue(sValue)"}
+ addUserKnob {1 FileName_NK l INVISIBLE +INVISIBLE}
+ FileName_NK Sh08
+ addUserKnob {1 FileNameVer_NK l INVISIBLE +INVISIBLE}
+ FileNameVer_NK Sh08_v03
+ addUserKnob {26 txt_OutputPathPreview l "" +STARTLINE T "Output Path Preview"}
+ addUserKnob {1 Folder +DISABLED}
+ Folder Z:/GANZBERG_ROLLERCOASTER/Out/ONLINE/2017_10_07/60s/Sh08_v03/comp/
+ addUserKnob {1 FileName l Name +DISABLED}
+ FileName Sh08_v03_comp
+ addUserKnob {1 FileExt +DISABLED}
+ FileExt dpx
+ addUserKnob {41 datatype T Write_GOP.datatype}
+ addUserKnob {26 separator3 l "" +STARTLINE}
+ addUserKnob {26 txt_Local l Local T ""}
+ addUserKnob {22 CreateFolder l "   Create Folder   " -STARTLINE T "import os\n\ndef createdir( file ): # Function Create Dir\n    dir = os.path.dirname( file ) # Get Dir Name\n    if not os.path.isdir ( dir ): # Check Does File Exist\n        #if nuke.ask( 'Create directory?\\n%s' % dir ): # Ark Create Dir\n        os.makedirs( dir ) # Create Dir\n\nThisNode = nuke.thisNode() # Get This Node\n\n# Create Folder\nProjDirVal = ThisNode.knob('ProjectDir').value() # Get Project Dir Value\nModeVal = ThisNode.knob('Mode').value() # Get Mode Value\nVerVal = ThisNode.knob('Version').value() # Get Version Value \nSHVal = ThisNode.knob('Shot').value() # Get Shot Value\nDTVal = ThisNode.knob('DateTime').value() # Get Date Time Value\nPNVal = ThisNode.knob('PassName').value() # Get Pass Name Value\nFNVal = ThisNode.knob('FileName_NK').value() # Get FileName No Version Value\nFNVerVal = ThisNode.knob('FileNameVer_NK').value() # Get FileName Version Value\n\nfor i in nuke.allNodes('Write', ThisNode): # Loop All Write Node\n    if i.knob('Write_EXP').value() == 'GlobalOutput': # Check Write Node EXR\n        WOutput_Val = i.knob('disable').value() # Get Disable Value\n\nif ProjDirVal != \"\": # Check Project Dir Value Not Empty\n    if ( ThisNode.knob('Folder').value() and ThisNode.knob('FileName').value() ) == \"\": # Check Folder and Name Preview\n        nuke.message('Not have Folder or FileName Preview. Can\\'t create folder. Please check agian.') # Alert\n    else:\n        if ModeVal == 'precomp': # procomp\n            if ( PNVal ) == \"\": # Check Passname\n                nuke.message('Passname missing. Can\\'t create folder. Please check agian.') # Alert\n            else:\n                if not WOutput_Val: # Check Write EXR Node Not Disable\n                    createdir( ThisNode.knob('Folder').value() ) # Create Dir\n        elif ModeVal == 'out': # out\n            if ( VerVal and SHVal and PNVal ) == \"\": # Check Passname Version Shot\n                nuke.message('Passname or Version or Shot missing. Can\\'t create folder. Please check agian.') # Alert\n            else:\n                if not WOutput_Val: # Check Write EXR Node Not Disable\n                    createdir( ThisNode.knob('Folder').value() ) # Create EXR Dir\n        elif ModeVal == 'online': # online\n            if ( VerVal and SHVal and DTVal and PNVal ) == \"\": # Check Passname Version Shot DateTime\n                nuke.message('Passname or Version or Shot or DateTime missing. Can\\'t create folder. Please check agian.') # Alert\n            else:\n                if not WOutput_Val: # Check Write EXR Node Not Disable\n                    createdir( ThisNode.knob('Folder').value() ) # Create Dir\nelse:\n    nuke.message('Project Dir missing. Can\\'t create folder. Please check agian.') # Alert"}
+ addUserKnob {22 Update -STARTLINE T "import re , string, os\nfrom datetime import datetime, date, time\n\ndef GetStructPath(sPath): # Function Get Structure Path\n    StringProj = \"\"; StringVersion = \"\"; StringShot = \"\"; StringFileName = \"\"; StringFileNameVersion = \"\" # Local Variable String Project Version Shot FileName\n    \n    matchObjProj = re.match(r'(?i)\\A(\\D:/.*?/)comp/', sPath) # Match Pettren Project Dir\n    if matchObjProj: # Check Match\n        StringProj = matchObjProj.group(1)\n    else:\n        StringProj = \"\" # Set String Empty\n    \n    aDirSplit = ( os.path.dirname( sPath ) ).split( \"/\" )\n    if len( aDirSplit ) > 4:\n        StringVersion = aDirSplit\[ len( aDirSplit )-2 ]\n        StringShot = aDirSplit\[ len( aDirSplit )-1 ]\n    else:\n        StringVersion = \"\"\n        StringShot = \"\"\n\n    matchObjFileName = re.match(r'(.*)_\[vV]\\d+', os.path.basename( sPath )) # Match Pettren FileName No Version\n    if matchObjFileName: # Check Match\n        StringFileName = matchObjFileName.group(1)\n    else:\n        StringFileName = \"\" # Set String Empty\n        \n    matchObjFileNameVersion = re.match(r'(.*_\[vV]\\d+).*', os.path.basename( sPath )) # Match Pettren FileName No Version\n    if matchObjFileNameVersion: # Check Match\n        StringFileNameVersion = matchObjFileNameVersion.group(1)\n    else:\n        StringFileNameVersion = \"\" # Set String Empty\n    \n    return ( StringProj, StringVersion, StringShot, StringFileName, StringFileNameVersion ) # Send Out Array of String Proj Version Shot FileName\n\ndef UpdatePreview( ThisNode, DT ): # Check Pattren Input\n    nukeFile = nuke.Root().name() # Get Root Name\n    \n    if nukeFile == 'Root': # Check Root Name for File Save or Not\n        nuke.message('Please save nuke file before update.') # Alert\n    else:\n        nukeFileFolder = os.path.dirname( nukeFile ) # Get Dir Name from Nuke File\n        aStructPath = GetStructPath( nukeFile ) # Get Structure Path from Nuke File\n        \n        # Set Control\n        ThisNode.knob('ProjectDir').setValue(aStructPath\[0]) # Set Project Dir Value\n        ThisNode.knob('Version').setValue(aStructPath\[1]) # Set Version Value\n        ThisNode.knob('Shot').setValue(aStructPath\[2]) # Set Shot Value    \n        ThisNode.knob('FileName_NK').setValue(aStructPath\[3]) # Set FileName No Version Value\n        ThisNode.knob('FileNameVer_NK').setValue(aStructPath\[4]) # Set FileName Version Value\n        ThisNode.knob('DateTime').setValue(DT) # Set DateTime Value\n        \n        # Set Preview\n        ProjDirVal = ThisNode.knob('ProjectDir').value() # Get Project Dir Value\n        ModeVal = ThisNode.knob('Mode').value() # Get Mode Value\n        VerVal = ThisNode.knob('Version').value() # Get Version Value \n        SHVal = ThisNode.knob('Shot').value() # Get Shot Value\n        DTVal = ThisNode.knob('DateTime').value() # Get Date Time Value\n        PNVal = ThisNode.knob('PassName').value() # Get Pass Name Value\n        PNVal = re.sub( r'\[^A-Za-z0-9_]', '_', PNVal ) # Replace Non Word Characters\n        FNVal = ThisNode.knob('FileName_NK').value() # Get FileName No Version Value\n        FNVerVal = ThisNode.knob('FileNameVer_NK').value() # Get FileName Version Value\n        \n        bError = True # Error State\n        if ModeVal == 'precomp': # procomp\n            if ( PNVal ) == \"\": # Check Passname\n                nuke.message('Passname missing. Can\\'t create folder. Please check agian.') # Alert\n                bError = False # Set Error State\n            else:\n                RendDir = nukeFileFolder + \"/\" + \"precomps\" + \"/\" + FNVerVal + \"/\" # Dir\n                RendFile = FNVerVal + \"_\" + PNVal # File\n                bError = True # Set Error State\n        elif ModeVal == 'out': # out\n            if ( VerVal and SHVal and PNVal ) == \"\": # Check Passname Version Shot\n                nuke.message('Passname or Version or Shot missing. Can\\'t create folder. Please check agian.') # Alert\n                bError = False # Set Error State\n            else:\n                RendDir = ProjDirVal + \"Out\" + \"/\" + VerVal + \"/\" + SHVal + \"/\" + PNVal + \"/\" # Dir\n                RendFile = FNVal + '_' + PNVal # File\n                bError = True # Set Error State\n        elif ModeVal == 'online': # online\n            if ( VerVal and SHVal and DTVal and PNVal ) == \"\": # Check Passname Version Shot DateTime\n                nuke.message('Passname or Version or Shot or DateTime missing. Can\\'t create folder. Please check agian.') # Alert\n                bError = False # Set Error State\n            else:\n                RendDir = ProjDirVal + \"Out\" + \"/ONLINE\" + \"/\" + DTVal + \"/\" + VerVal + \"/\" + FNVerVal + \"/\" + PNVal + \"/\" # Dir\n                RendFile = FNVerVal + '_' + PNVal # File\n                bError = True # Set Error State\n        \n        if bError: # Check Error State\n            ThisNode.knob('Folder').setValue(RendDir) # Set Folder Value\n            ThisNode.knob('FileName').setValue(RendFile) # Set File Value\n            if ThisNode.node('Write_GOP').knob('file_type').value() != 'targa':\n                theEXT = ThisNode.node('Write_GOP').knob('file_type').value()\n            else:\n                theEXT = 'tga'\n            ThisNode.knob('FileExt').setValue(theEXT) # Set File Ext Value\n            ThisNode.setName(ModeVal + '_' + PNVal) # Set Node Name\n        else:\n            ThisNode.knob('Folder').setValue('') # Set Folder Value\n            ThisNode.knob('FileName').setValue('') # Set File Value\n            ThisNode.knob('FileExt').setValue('') # Set File Ext Value\n            ThisNode.setName('Global_Output') # Set Node Name\n\nDTNow = datetime.now().strftime(\"%Y_%m_%d\") # Get Date Time       \nUpdatePreview( nuke.thisNode(), DTNow )"}
+ addUserKnob {22 Explorer -STARTLINE T "import os, string\n\ndef CheckSlashes( sFilename ): # Function Check Slashes Replace with /\n    sResult = sFilename # File Name = Result\n    sNewResult = \"\" # Declare New Result\n    sNewResult = sResult.replace( \"\\\\\\\\\", \"/\" ) # Replace String\n    while sNewResult != sResult : # Loop Check Not Match Result\n        sResult = sNewResult # New Result to Result\n        sNewResult = sResult.replace( \"\\\\\\\\\", \"/\" ) # Replace String\n    \n    sResult = sNewResult # New Result to Result\n    sNewResult = sResult.replace( \"//\", \"/\" ) # Replace String\n    while sNewResult != sResult : # Loop Check Not Match Result\n        sResult = sNewResult # New Result to Result\n        sNewResult = sResult.replace( \"//\", \"/\" ) # Replace String\n             \n    return sNewResult # Send Out File Name Result Collect\n\nThisNode = nuke.thisNode() # Get This Node\nFolderVal = ThisNode.knob('Folder').value() # Folder\nFolderVal = CheckSlashes( FolderVal )\n\nsPath = string.replace ( FolderVal, '/', '\\\\' )\nos.popen( ('explorer ' + sPath), 'r' )"}
+ addUserKnob {22 Reset -STARTLINE T "ThisNode = nuke.thisNode()\n\nThisNode.knob('Mode').setValue('out')\nThisNode.knob('Channel_IN').setValue('rgba')\nThisNode.knob('channels').setValue('rgba')\nThisNode.knob('FRange_Start').setValue(1)\nThisNode.knob('FRange_End').setValue(1)\nThisNode.knob('FRange_Use').setValue(0)\n\nThisNode.knob('PassName').setValue(\"comp\")\n\nret = True\nThisNode.knob('ProjectDir').setValue(\"\")\nThisNode.knob('ProjectDir').setEnabled(ret)\nThisNode.knob('Version').setValue(\"\")\nThisNode.knob('Version').setEnabled(ret)\nThisNode.knob('Shot').setValue(\"\")\nThisNode.knob('Shot').setEnabled(ret)\nThisNode.knob('DateTime').setValue(\"\")\nThisNode.knob('DateTime').setEnabled(ret)\nThisNode.knob('FileName_NK').setValue(\"\")\nThisNode.knob('FileName_NK').setEnabled(ret)\nThisNode.knob('FileNameVer_NK').setValue(\"\")\nThisNode.knob('FileNameVer_NK').setEnabled(ret)\n\nThisNode.knob('Folder').setValue(\"\")\nThisNode.knob('FileName').setValue(\"\")\nThisNode.knob('FileExt').setValue(\"\")\nThisNode.knob('colorspace_in').setValue('RGB')\nThisNode.knob('colorspace_out').setValue('RGB')\nThisNode.knob('file_type').setValue('jpeg')\n\nThisNode.knob('beforeRenderEXR').setValue(\"\") # Before Render\nThisNode.knob('beforeFrameRenderEXR').setValue(\"\") # Before Frame Render\nThisNode.knob('afterFrameRenderEXR').setValue(\"\") # After Frame Render\nThisNode.knob('afterRenderEXR').setValue(\"\") # After Render"}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 separator5 l "" +STARTLINE}
+ addUserKnob {26 txt_Global l Global T ""}
+ addUserKnob {22 UpdateAll l "   Update and Create Folder All Nodes   " -STARTLINE T "import re , string, os\nfrom datetime import datetime, date, time\n\ndef GetStructPath(sPath): # Function Get Structure Path\n    StringProj = \"\"; StringVersion = \"\"; StringShot = \"\"; StringFileName = \"\"; StringFileNameVersion = \"\" # Local Variable String Project Version Shot FileName\n    \n    matchObjProj = re.match(r'(?i)\\A(\\D:/.*?/)comp/', sPath) # Match Pettren Project Dir\n    if matchObjProj: # Check Match\n        StringProj = matchObjProj.group(1)\n    else:\n        StringProj = \"\" # Set String Empty\n    \n    aDirSplit = ( os.path.dirname( sPath ) ).split( \"/\" )\n    if len( aDirSplit ) > 4:\n        StringVersion = aDirSplit\[ len( aDirSplit )-2 ]\n        StringShot = aDirSplit\[ len( aDirSplit )-1 ]\n    else:\n        StringVersion = \"\"\n        StringShot = \"\"\n\n    matchObjFileName = re.match(r'(.*)_\[vV]\\d+', os.path.basename( sPath )) # Match Pettren FileName No Version\n    if matchObjFileName: # Check Match\n        StringFileName = matchObjFileName.group(1)\n    else:\n        StringFileName = \"\" # Set String Empty\n        \n    matchObjFileNameVersion = re.match(r'(.*_\[vV]\\d+).*', os.path.basename( sPath )) # Match Pettren FileName No Version\n    if matchObjFileNameVersion: # Check Match\n        StringFileNameVersion = matchObjFileNameVersion.group(1)\n    else:\n        StringFileNameVersion = \"\" # Set String Empty\n    \n    return ( StringProj, StringVersion, StringShot, StringFileName, StringFileNameVersion ) # Send Out Array of String Proj Version Shot FileName\n\ndef UpdatePreview( ThisNode, DT ): # Check Pattren Input\n    nukeFile = nuke.Root().name() # Get Root Name\n    \n    if nukeFile == 'Root': # Check Root Name for File Save or Not\n        nuke.message('Please save nuke file before update.') # Alert\n    else:\n        nukeFileFolder = os.path.dirname( nukeFile ) # Get Dir Name from Nuke File\n        aStructPath = GetStructPath( nukeFile ) # Get Structure Path from Nuke File\n        \n        # Set Control\n        ThisNode.knob('ProjectDir').setValue(aStructPath\[0]) # Set Project Dir Value\n        ThisNode.knob('Version').setValue(aStructPath\[1]) # Set Version Value\n        ThisNode.knob('Shot').setValue(aStructPath\[2]) # Set Shot Value    \n        ThisNode.knob('FileName_NK').setValue(aStructPath\[3]) # Set FileName No Version Value\n        ThisNode.knob('FileNameVer_NK').setValue(aStructPath\[4]) # Set FileName Version Value\n        ThisNode.knob('DateTime').setValue(DT) # Set DateTime Value\n        \n        # Set Preview\n        ProjDirVal = ThisNode.knob('ProjectDir').value() # Get Project Dir Value\n        ModeVal = ThisNode.knob('Mode').value() # Get Mode Value\n        VerVal = ThisNode.knob('Version').value() # Get Version Value \n        SHVal = ThisNode.knob('Shot').value() # Get Shot Value\n        DTVal = ThisNode.knob('DateTime').value() # Get Date Time Value\n        PNVal = ThisNode.knob('PassName').value() # Get Pass Name Value\n        PNVal = re.sub( r'\[^A-Za-z0-9_]', '_', PNVal ) # Replace Non Word Characters\n        FNVal = ThisNode.knob('FileName_NK').value() # Get FileName No Version Value\n        FNVerVal = ThisNode.knob('FileNameVer_NK').value() # Get FileName Version Value\n        \n        bError = True # Error State\n        if ModeVal == 'precomp': # procomp\n            if ( PNVal ) == \"\": # Check Passname\n                nuke.message('Passname missing. Can\\'t create folder. Please check agian.') # Alert\n                bError = False # Set Error State\n            else:\n                RendDir = nukeFileFolder + \"/\" + \"precomps\" + \"/\" + FNVerVal + \"/\" # Dir\n                RendFile = FNVerVal + \"_\" + PNVal # File\n                bError = True # Set Error State\n        elif ModeVal == 'out': # out\n            if ( VerVal and SHVal and PNVal ) == \"\": # Check Passname Version Shot\n                nuke.message('Passname or Version or Shot missing. Can\\'t create folder. Please check agian.') # Alert\n                bError = False # Set Error State\n            else:\n                RendDir = ProjDirVal + \"Out\" + \"/\" + VerVal + \"/\" + SHVal + \"/\" + PNVal + \"/\" # Dir\n                RendFile = FNVal + '_' + PNVal # File\n                bError = True # Set Error State\n        elif ModeVal == 'online': # online\n            if ( VerVal and SHVal and DTVal and PNVal ) == \"\": # Check Passname Version Shot DateTime\n                nuke.message('Passname or Version or Shot or DateTime missing. Can\\'t create folder. Please check agian.') # Alert\n                bError = False # Set Error State\n            else:\n                RendDir = ProjDirVal + \"Out\" + \"/ONLINE\" + \"/\" + DTVal + \"/\" + VerVal + \"/\" + FNVerVal + \"/\" + PNVal + \"/\" # Dir\n                RendFile = FNVerVal + '_' + PNVal # File\n                bError = True # Set Error State\n        \n        if bError: # Check Error State\n            ThisNode.knob('Folder').setValue(RendDir) # Set Folder Value\n            ThisNode.knob('FileName').setValue(RendFile) # Set File Value\n            if ThisNode.node('Write_GOP').knob('file_type').value() != 'targa':\n                theEXT = ThisNode.node('Write_GOP').knob('file_type').value()\n            else:\n                theEXT = 'tga'\n            ThisNode.knob('FileExt').setValue(theEXT) # Set File Ext Value\n            ThisNode.setName(ModeVal + '_' + PNVal) # Set Node Name\n        else:\n            ThisNode.knob('Folder').setValue('') # Set Folder Value\n            ThisNode.knob('FileName').setValue('') # Set File Value\n            ThisNode.setName('Global_Output') # Set Node Name\n\ndef ExecButton( oNode, sDT ): # Function Execute Button\n    if oNode.knob('Class_GlobalOutput'): # Check Class Global Output\n        UpdatePreview(oNode, sDT) # oNode.knob('Update').execute() # Execute Update Button\n        oNode.knob('CreateFolder').execute() # Execute Create Folder Button\n\nDTNow = datetime.now().strftime(\"%Y_%m_%d\") # Get Date Time\n\nfor gp in nuke.allNodes('Group', nuke.root()): # Loop All Group Node\n    ExecButton( gp, DTNow ) # Execute Button\n\nfor gm in nuke.allNodes('Global_Output', nuke.root()): # Loop All Global_Output Node\n    ExecButton( gm, DTNow ) # Execute Button"}
+ addUserKnob {6 Precomp_Disable l "Precomp Disable" +STARTLINE}
+ addUserKnob {6 Out_Disable l "Out Disable" -STARTLINE}
+ addUserKnob {6 Online_Disable l "Online Disable" -STARTLINE}
+ addUserKnob {22 Disable_Nodes l Disable -STARTLINE T "ThisNode = nuke.thisNode() \n\ndef ModeDisable(sClass, sMode, sKnob, iVal):\n    for n in nuke.allNodes( sClass, nuke.root() ):\n        if n.knob('Mode'):\n            if n.knob('Mode').value() == sMode:\n                n.knob(sKnob).setValue(iVal)\n                n.knob('disable').setValue(iVal)\n\nPrecomp_Disable_Val = ThisNode.knob('Precomp_Disable').value()\nOut_Disable_Val = ThisNode.knob('Out_Disable').value()\nOnline_Disable_Val = ThisNode.knob('Online_Disable').value()\n\nModeDisable('Group', 'precomp', 'Precomp_Disable', Precomp_Disable_Val)\nModeDisable('Global_Output', 'precomp', 'Precomp_Disable', Precomp_Disable_Val)\n\nModeDisable('Group', 'out', 'Out_Disable', Out_Disable_Val)\nModeDisable('Global_Output', 'out', 'Out_Disable', Out_Disable_Val)\n\nModeDisable('Group', 'online', 'Online_Disable', Online_Disable_Val)\nModeDisable('Global_Output', 'online', 'Online_Disable', Online_Disable_Val)"}
+ addUserKnob {20 Extra}
+ addUserKnob {41 colorspace_in l in T Colorspace.colorspace_in}
+ addUserKnob {41 colorspace_out l out T Colorspace.colorspace_out}
+ addUserKnob {6 OverType l "Override Type" +STARTLINE}
+ OverType true
+ addUserKnob {41 file_type l "file type" T Write_GOP.file_type}
+ addUserKnob {41 compression T Write_GOP.compression}
+ addUserKnob {41 render_order_EXR l "render order" T Write_GOP.render_order}
+ addUserKnob {22 OpenFlipbook l "   Open Flipbook   " T "nuke.thisNode().node('Write_EXR').setSelected(1) \nnukescripts.showFlipbookDialogForSelected()" +STARTLINE}
+ addUserKnob {20 Python}
+ addUserKnob {41 beforeRenderEXR l "before render" T Write_GOP.beforeRender}
+ addUserKnob {41 beforeFrameRenderEXR l "before each frame" T Write_GOP.beforeFrameRender}
+ addUserKnob {41 afterFrameRenderEXR l "after each frame" T Write_GOP.afterFrameRender}
+ addUserKnob {41 afterRenderEXR l "after render" T Write_GOP.afterRender}
+ addUserKnob {20 About}
+ addUserKnob {26 Author l "Gizmo : " T "Pichaya Popanyasak"}
+ addUserKnob {26 Created l "Created : " T 07/2014}
+ addUserKnob {26 Modified l "Modified : " T 02/2015}
+ addUserKnob {26 GM_Version l "Version : " T 1.5}
+ addUserKnob {26 At l "Company : " T "The Post Bangkok"}
+}
+ Input {
+  inputs 0
+  name Input1
+  label "Link: \[exists parent.input0.label]\nMode: \[value parent.Mode]"
+  xpos -480
+  ypos -501
+ }
+set Ncd34000 [stack 0]
+ NoOp {
+  name Online
+  tile_color 0xff0000ff
+  xpos -260
+  ypos -367
+ }
+ Colorspace {
+  name Colorspace
+  xpos -260
+  ypos -249
+ }
+ Crop {
+  box {0 0 {"\[value root.width]"} {"\[value root.height]"}}
+  name Crop
+  label "\[value root.width]x\[value root.height]"
+  xpos -260
+  ypos -183
+ }
+ set C38274c00 [stack 0]
+ Dot {
+  name Dot2
+  xpos -226
+  ypos -102
+ }
+push $Ncd34000
+ NoOp {
+  name Out
+  tile_color 0xffff
+  xpos -480
+  ypos -369
+ }
+clone $C38274c00 {
+  xpos -480
+  ypos -183
+  selected false
+ }
+push $Ncd34000
+ NoOp {
+  name Precomp
+  tile_color 0xff00ff
+  xpos -700
+  ypos -369
+ }
+ Dot {
+  name Dot1
+  xpos -666
+  ypos -102
+ }
+ Switch {
+  inputs 3
+  which {{parent.Mode}}
+  name Switch_Mode
+  tile_color 0xff00ffff
+  label "\[value which]"
+  xpos -480
+  ypos -111
+ }
+ Shuffle {
+  name Shuffle_Channel
+  label "\[value in]"
+  xpos -480
+  ypos -15
+ }
+ Write {
+  channels rgba
+  file "\[value parent.Folder]\[value parent.FileName]_%07d.\[value parent.FileExt]"
+  file_type dpx
+  datatype "12 bit"
+  first 0
+  last 0
+  checkHashOnRead false
+  version 11
+  name Write_GOP
+  label "\[value parent.Folder]\[value parent.FileName].\[value parent.FileExt]"
+  xpos -480
+  ypos 105
+  disable {{parent.disable}}
+  addUserKnob {20 Expression}
+  addUserKnob {26 Write_EXP l Write T GlobalOutput}
+  addUserKnob {6 CheckTGA l TGA +STARTLINE}
+ }
+ Output {
+  name Output1
+  xpos -480
+  ypos 183
+ }
+ NoOp {
+  inputs 0
+  name Control_Expression
+  tile_color 0xffff00ff
+  xpos -480
+  ypos -561
+  addUserKnob {20 Parent}
+  addUserKnob {6 ParentSetting l "Parent Setting" +STARTLINE}
+  ParentSetting {{"\[python -execlocal def\\ CopyColorN2N(oSourceNode,\\ oTargetNode):\\n\\ \\ \\ \\ c\\ =\\ oSourceNode.knob('tile_color').value()\\n\\ \\ \\ \\ oTargetNode.knob('tile_color').setValue(c)\\n\\nParentNode\\ =\\ nuke.thisParent()\\nPrecompNode\\ =\\ ParentNode.node('Precomp')\\nOutNode\\ =\\ ParentNode.node('Out')\\nOnlineNode\\ =\\ ParentNode.node('Online')\\nModeVal\\ =\\ ParentNode.node('Switch_Mode').knob('which').value()\\n\\nif\\ ModeVal\\ ==\\ 0:\\ #\\ precomp\\n\\ \\ \\ \\ CopyColorN2N(PrecompNode,\\ ParentNode)\\n\\ \\ \\ \\ if\\ ParentNode.knob('OverType').value()\\ ==\\ False:\\n\\ \\ \\ \\ \\ \\ \\ \\ ParentNode.node('Write_GOP').knob('file_type').setValue('exr')\\n\\ \\ \\ \\ \\ \\ \\ \\ ParentNode.node('Write_GOP').knob('compression').setValue('PIZ\\ Wavelet\\ (32\\ scanlines)')\\n\\ \\ \\ \\ Result\\ =\\ 1\\nelif\\ ModeVal\\ ==\\ 1:\\ #\\ out\\n\\ \\ \\ \\ CopyColorN2N(OutNode,\\ ParentNode)\\n\\ \\ \\ \\ if\\ ParentNode.knob('OverType').value()\\ ==\\ False:\\n\\ \\ \\ \\ \\ \\ \\ \\ ParentNode.node('Write_GOP').knob('file_type').setValue('jpeg')\\n\\ \\ \\ \\ \\ \\ \\ \\ ParentNode.node('Write_GOP').knob('_jpeg_quality').setValue('1')\\n\\ \\ \\ \\ Result\\ =\\ 1\\nelif\\ ModeVal\\ ==\\ 2:\\ #\\ online\\n\\ \\ \\ \\ CopyColorN2N(OnlineNode,\\ ParentNode)\\n\\ \\ \\ \\ if\\ ParentNode.knob('OverType').value()\\ ==\\ False:\\n\\ \\ \\ \\ \\ \\ \\ \\ ParentNode.node('Write_GOP').knob('file_type').setValue('exr')\\n\\ \\ \\ \\ \\ \\ \\ \\ ParentNode.node('Write_GOP').knob('compression').setValue('PIZ\\ Wavelet\\ (32\\ scanlines)')\\n\\ \\ \\ \\ Result\\ =\\ 1\\nelse:\\n\\ \\ \\ \\ Result\\ =\\ 0\\n\\nret\\ =\\ Result]"}}
+  addUserKnob {6 Selected_Write l "Selected Write" +STARTLINE}
+  Selected_Write {{"\[python -execlocal ParentNode\\ =\\ nuke.thisParent()\\nSelectedVal\\ =\\ ParentNode.isSelected()\\nParentNode.node('Write_GOP').setSelected(\\ SelectedVal\\ )\\nret\\ =\\ SelectedVal]"}}
+  addUserKnob {20 Channel}
+  addUserKnob {6 Channel_EXP l "Channel Setting" +STARTLINE}
+  Channel_EXP {{"\[python -execlocal ParentNode\\ =\\ nuke.thisParent()\\nShuffleNode\\ =\\ ParentNode.node('Shuffle_Channel')\\nShuffleVal\\ =\\ ShuffleNode.knob('in').value()\\n\\nif\\ ShuffleVal\\ ==\\ 'rgb':\\n\\ \\ \\ \\ ShuffleNode.knob('alpha').setValue('white')\\n\\ \\ \\ \\ Result\\ =\\ 1\\nelif\\ ShuffleVal\\ ==\\ 'rgba':\\n\\ \\ \\ \\ ShuffleNode.knob('alpha').setValue('alpha')\\n\\ \\ \\ \\ Result\\ =\\ 1\\nelse:\\n\\ \\ \\ \\ ShuffleNode.knob('alpha').setValue('alpha')\\n\\ \\ \\ \\ Result\\ =\\ 0\\n\\nret\\ =\\ Result]"}}
+ }
+end_group

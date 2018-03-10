@@ -1,0 +1,197 @@
+#! C:/Program Files/Nuke9.0v3/nuke-9.0.3.dll -nx
+#version 9.0 v3
+Gizmo {
+ inputs 2
+ tile_color 0xffae00ff
+ gl_color 0xff6e00ff
+ note_font Verdana
+ mapsize {0.15 0.15}
+ addUserKnob {20 control}
+ addUserKnob {26 VIGNETTE -STARTLINE}
+ addUserKnob {41 translate l Position T TransformVignette.translate}
+ addUserKnob {7 Size R 0 2}
+ Size 1.1
+ addUserKnob {7 Softness R 0 10}
+ Softness 3
+ addUserKnob {7 Ratio R 0 2}
+ Ratio 1
+ addUserKnob {7 Gamma R 0 2}
+ Gamma 1
+ addUserKnob {26 ""}
+ addUserKnob {26 COLOR -STARTLINE T ""}
+ addUserKnob {41 multiply T Grade1.multiply}
+ addUserKnob {41 gamma T Grade1.gamma}
+ addUserKnob {41 saturation T Saturation1.saturation}
+ addUserKnob {7 ChromaAberration R 0 2}
+ ChromaAberration 1
+ addUserKnob {26 space l "" +STARTLINE T "\n"}
+ addUserKnob {41 saturation_1 l "overall saturation" T HueShift1.saturation}
+ addUserKnob {41 color l "color axis" T HueShift1.color}
+ addUserKnob {41 hue_rotation l "hue rotation" T HueShift1.hue_rotation}
+ addUserKnob {41 color_saturation l "saturation along axis" T HueShift1.color_saturation}
+ addUserKnob {26 Blur l "" +STARTLINE T "\nBlur vignette area\n"}
+ addUserKnob {41 channels T Blur_vignette.channels}
+ addUserKnob {41 size_1 l size T Blur_vignette.size}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix T Keymix1.mix}
+}
+ ColorWheel {
+  inputs 0
+  gamma 0.45
+  name ColorWheel1
+  xpos 321
+  ypos -708
+ }
+ Radial {
+  inputs 0
+  area {0 0 {width} {height}}
+  softness 0
+  name Radial1
+  xpos 422
+  ypos -663
+ }
+set Nb767bc00 [stack 0]
+ Input {
+  inputs 0
+  name mask
+  label a
+  xpos 479
+  ypos -537
+  number 1
+ }
+ Dot {
+  name Dot2
+  xpos 513
+  ypos -388
+ }
+push $Nb767bc00
+ Reformat {
+  name Reformat1
+  xpos 321
+  ypos -602
+ }
+ Transform {
+  scale {{(parent.Size)*parent.Ratio x1 0} {(parent.Size)/parent.Ratio x1 0}}
+  center {640 360}
+  name TransformVignette
+  xpos 321
+  ypos -564
+ }
+ Blur {
+  channels alpha
+  size {{parent.Softness*100}}
+  name Blur4
+  xpos 321
+  ypos -530
+ }
+ Reformat {
+  name Reformat2
+  xpos 321
+  ypos -492
+ }
+ Grade {
+  channels alpha
+  gamma {{parent.Gamma}}
+  name Grade2
+  xpos 321
+  ypos -466
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 321
+  ypos -424
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 190
+  ypos -799
+ }
+ Dot {
+  name Dot1
+  xpos 224
+  ypos -598
+ }
+set Nb82e6c00 [stack 0]
+ Crop {
+  box {0 0 {width} {height}}
+  crop false
+  name Crop2
+  xpos 59
+  ypos -600
+ }
+ TransformMasked {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  translate {{-Transform1.translate.x} {-Transform1.translate.y}}
+  scale {{(parent.ChromaAberration+49)/50}}
+  center {{width/2} {height/2}}
+  black_outside false
+  name Transform2
+  selected true
+  xpos 12
+  ypos -566
+ }
+ TransformMasked {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  translate {{-Transform1.translate.x} {-Transform1.translate.y}}
+  scale {{(parent.ChromaAberration+99)/100}}
+  center {{width/2} {height/2}}
+  black_outside false
+  name Transform1
+  xpos 12
+  ypos -540
+ }
+ Blur {
+  channels rgba
+  size 2
+  name Blur_vignette
+  xpos 59
+  ypos -504
+ }
+ Grade {
+  multiply 0.1
+  name Grade1
+  xpos 59
+  ypos -480
+ }
+ Saturation {
+  name Saturation1
+  xpos 59
+  ypos -456
+ }
+ HueShift {
+  name HueShift1
+  xpos 59
+  ypos -391
+ }
+push $Nb82e6c00
+ Keymix {
+  inputs 3
+  invertMask true
+  name Keymix1
+  xpos 190
+  ypos -397
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  name Crop1
+  xpos 190
+  ypos -361
+ }
+ Output {
+  name Output1
+  xpos 190
+  ypos -279
+ }
+ Viewer {
+  inputs 2
+  frame_range 1-100
+  fps 25
+  input_number 1
+  input_process false
+  name Viewer1
+  xpos 30
+  ypos -235
+ }
+end_group

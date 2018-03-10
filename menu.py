@@ -8,6 +8,7 @@ sys.path.append('P:/_studioTool')
 #sys.path.append('D:/WORK/Programming/project')
 modulepath = os.path.dirname(__file__) + '/'
 
+# Load pixelfudger Plugins
 try:
 	nuke.pluginAddPath(modulepath + 'pixelfudger')
 	import pixelfudger
@@ -15,19 +16,15 @@ except ImportError as e:
 	print ("Load plugin : pixelfudger Error")
 	print e
 
+# Load custom Plugins
+try:
+	nuke.pluginAddPath(modulepath + 'customGizmo')
+	import customGizmo
+except ImportError as e:
+	print ("Load plugin : customGizmo Error")
+	print e
+
 # Add extra menu : SAL_tools
-# try:
-# 	from renderthreads import renderthreads
-
-# except ImportError:
-# 	sys.path.append(modulepath + 'renderthreads')
-# 	print("add path : " + modulepath + 'renderthreads' )
-
-# 	try:
-# 		from renderthreads import renderthreads
-# 	except Exception as e:
-# 		print ("Import error : renderthreads")
-# 		traceback.print_exc()
 
 def loadRenderThread():
 	try:
