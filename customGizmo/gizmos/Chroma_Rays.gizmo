@@ -1,0 +1,95 @@
+#! C:/Program Files/Nuke7.0v5/Nuke7.0.exe -nx
+version 7.0 v5
+Gizmo {
+ addUserKnob {20 User}
+ addUserKnob {41 scale_R l "scale R" T GodRays_R.scale}
+ addUserKnob {41 scale_G l "scale G" T GodRays_G.scale}
+ addUserKnob {41 scale_B l "scale B" T GodRays_B.scale}
+ addUserKnob {41 center T GodRays_R.center}
+ addUserKnob {22 GetCenter l "Center Source" -STARTLINE T "n = nuke.thisNode()\n\nw = n.input(0).format().width()/2.0\nh = n.input(0).format().height()/2.0\n\nn\['center'].setValue( (w,h) )"}
+ addUserKnob {41 steps T GodRays_R.steps}
+}
+ Input {
+  inputs 0
+  name Source
+  label "Input Connect: \[exists parent.input0.label]\nWidth: \[value parent.input0.format.width]\nHeight: \[value parent.input0.format.height]"
+  xpos 180
+  ypos -447
+ }
+set N10ca8850 [stack 0]
+ Shuffle {
+  red black
+  green black
+  name Shuffle_B
+  tile_color 0xffff
+  label "\[value in]"
+  xpos 290
+  ypos -351
+ }
+ GodRays {
+  scale 1.02
+  center {{parent.GodRays_R.center.x} {parent.GodRays_R.center.y}}
+  gamma {{parent.GodRays_R.gamma}}
+  steps {{parent.GodRays_R.steps}}
+  name GodRays_B
+  xpos 290
+  ypos -303
+ }
+push 0
+push $N10ca8850
+ Shuffle {
+  red black
+  blue black
+  name Shuffle_G
+  tile_color 0xff00ff
+  label "\[value in]"
+  xpos 180
+  ypos -351
+ }
+ GodRays {
+  scale 1.01
+  center {{parent.GodRays_R.center.x} {parent.GodRays_R.center.y}}
+  gamma {{parent.GodRays_R.gamma}}
+  steps {{parent.GodRays_R.steps}}
+  name GodRays_G
+  xpos 180
+  ypos -303
+ }
+push $N10ca8850
+ Shuffle {
+  green black
+  blue black
+  name Shuffle_R
+  tile_color 0xff0000ff
+  label "\[value in]"
+  xpos 70
+  ypos -351
+ }
+ GodRays {
+  name GodRays_R
+  xpos 70
+  ypos -303
+ }
+set N2457b440 [stack 0]
+ Merge2 {
+  inputs 3+1
+  operation plus
+  screen_alpha true
+  Achannels {rgba.red rgba.green rgba.blue none}
+  name Merge_Chroma
+  xpos 180
+  ypos -225
+ }
+ Output {
+  name Output1
+  xpos 180
+  ypos -129
+ }
+push $N2457b440
+ Viewer {
+  input_process false
+  name Viewer1
+  xpos -40
+  ypos -129
+ }
+end_group

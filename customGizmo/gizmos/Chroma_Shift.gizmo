@@ -1,0 +1,58 @@
+#! C:/Program Files/Nuke6.3v4/Nuke6.3.exe -nx
+version 6.3 v4
+Gizmo {
+ tile_color 0x3ffb5ff
+ gl_color 0x248ffff
+ label "\n"
+ note_font Verdana
+ mapsize {0.15 0.15}
+ addUserKnob {20 Chroma_Shift l "Chroma Shift"}
+ addUserKnob {26 ChormaTranslate l Chorma T Translate}
+ addUserKnob {7 TranslateX l x R -100 100}
+ TranslateX 10
+ addUserKnob {7 TranslateY l y R -100 100}
+ TranslateY 4
+ addUserKnob {26 ""}
+ addUserKnob {7 Spread R -1 1}
+ addUserKnob {41 Blur_Size l "Blur Size" T Blur1.size}
+ addUserKnob {26 ""}
+ addUserKnob {26 VFX l by T "VFX The Post BKK"}
+}
+ Input {
+  inputs 0
+  name Source
+  selected true
+  xpos 412
+  ypos -31
+ }
+ TransformMasked {
+  channels {rgba.red -rgba.green -rgba.blue}
+  translate {{parent.TranslateX i} {parent.TranslateY i}}
+  scale {{"1 + (Spread/10)" i}}
+  center {{input.width/2 i} {input.height/2 i}}
+  name Transform1
+  xpos 412
+  ypos 27
+ }
+ TransformMasked {
+  channels {-rgba.red -rgba.green rgba.blue}
+  translate {{-(parent.Transform1.translate) i} {-(parent.Transform1.translate) i}}
+  scale {{"1 - (Spread/10)" i}}
+  center {{input.width/2 i} {input.height/2 i}}
+  name Transform2
+  xpos 412
+  ypos 64
+ }
+ Blur {
+  channels rgb
+  size 4
+  name Blur1
+  xpos 412
+  ypos 100
+ }
+ Output {
+  name Output1
+  xpos 412
+  ypos 183
+ }
+end_group

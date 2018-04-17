@@ -1,0 +1,128 @@
+#! C:/Program Files/Nuke6.3v4/Nuke6.3.exe -nx
+version 6.3 v4
+Gizmo {
+ tile_color 0xffdaff
+ gl_color 0xe0c0ff
+ note_font Verdana
+ note_font_color 0xff
+ mapsize {0.15 0.15}
+ addUserKnob {20 User}
+ addUserKnob {7 size_expon l Size R 0 256}
+ size_expon 2
+ addUserKnob {7 factor l Factor R 0 5}
+ factor 1
+ addUserKnob {7 hardness l Softness}
+ hardness 0.1
+ addUserKnob {41 mix l Mix T Merge1.mix}
+ addUserKnob {26 ""}
+ addUserKnob {6 Reformat +STARTLINE}
+ Reformat true
+ addUserKnob {3 ExtraMargin l "Extra Margin"}
+ ExtraMargin 50
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 0
+  ypos -27
+ }
+set N961ae960 [stack 0]
+ Dot {
+  name Dot1
+  xpos 217
+  ypos 110
+ }
+ Dot {
+  name Dot2
+  xpos 217
+  ypos 388
+ }
+push $N961ae960
+ Blur {
+  size {{size_expon i}}
+  name Blur2
+  xpos 0
+  ypos 111
+ }
+ Blur {
+  size {{size_expon*factor i}}
+  mix {{hardness i}}
+  name Blur1
+  xpos 0
+  ypos 149
+ }
+ Blur {
+  size {{size_expon*(factor*2) i}}
+  mix {{hardness i}}
+  name Blur3
+  xpos 0
+  ypos 187
+ }
+ Blur {
+  size {{size_expon*(factor*4) i}}
+  mix {{hardness i}}
+  name Blur4
+  xpos 0
+  ypos 225
+ }
+ Blur {
+  size {{size_expon*(factor*8) i}}
+  mix {{hardness i}}
+  name Blur5
+  xpos 0
+  ypos 263
+ }
+ Blur {
+  size {{size_expon*(factor*16) i}}
+  mix {{hardness i}}
+  name Blur6
+  xpos 0
+  ypos 301
+ }
+ Blur {
+  size {{size_expon*(factor*32) i}}
+  mix {{hardness i}}
+  name Blur7
+  xpos 0
+  ypos 339
+ }
+ Blur {
+  size {{size_expon*(factor*64) i}}
+  mix {{hardness i}}
+  name Blur8
+  xpos 0
+  ypos 377
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0
+  name Merge1
+  xpos 0
+  ypos 480
+ }
+set N961b0c70 [stack 0]
+ Crop {
+  box {{"0  - parent.ExtraMargin"} {"0  - parent.ExtraMargin"} {"root.format.width + parent.ExtraMargin"} {"root.format.height + parent.ExtraMargin"}}
+  name Crop1
+  xpos 0
+  ypos 582
+  disable {{abs(parent.Reformat-1)}}
+ }
+set N9eab80b0 [stack 0]
+ Output {
+  name Output1
+  xpos 0
+  ypos 693
+ }
+push $N9eab80b0
+push $N961b0c70
+ Viewer {
+  inputs 2
+  input_number 1
+  input_process false
+  name Viewer1
+  xpos 292
+  ypos 582
+ }
+end_group

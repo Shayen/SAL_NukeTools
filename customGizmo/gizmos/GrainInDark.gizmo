@@ -1,0 +1,295 @@
+#! C:/Program Files/Nuke7.0v5/Nuke7.0.exe -nx
+version 7.0 v5
+Gizmo {
+ tile_color 0xffd9ff
+ gl_color 0xffd9ff
+ addUserKnob {20 Settings}
+ addUserKnob {41 GrainIntens l "Grain Intensity" T Intens.mix}
+ addUserKnob {41 TimeSmooth l "Temporal Smoothness" T Deflick.mix}
+ addUserKnob {41 TimeSmooth2 l "Extra Smoothness" T Deflick2.mix}
+ addUserKnob {41 MainGrainSet l "Main Grain" T MainGrain.mix}
+ addUserKnob {41 DarkGrainSet l "Dark Grain" T DarkGrain.mix}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 DarknessMin l "Darkness Min" T LumaMask.blackpoint}
+ addUserKnob {41 DarknessMax l "Darkness Max" T LumaMask.whitepoint}
+ addUserKnob {41 DarknessGamma l "Darkness Gamma" T LumaMask.gamma}
+ addUserKnob {41 ShowLuma l "Show Luminosity Mask" T ShowLumaMask.disable}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 MixWithSource l "Mix with Source" T Mix.mix}
+}
+ Input {
+  inputs 0
+  name Source
+  xpos -354
+  ypos 353
+ }
+ Dot {
+  name Dot7
+  xpos -320
+  ypos 492
+ }
+set N24cf31a0 [stack 0]
+ Dot {
+  name Dot5
+  xpos -203
+  ypos 538
+ }
+ Dot {
+  name Dot6
+  xpos -203
+  ypos 645
+ }
+push $N24cf31a0
+ Dot {
+  name Dot3
+  xpos -399
+  ypos 545
+ }
+set N24cf3bf0 [stack 0]
+ Dot {
+  name Dot2
+  xpos -281
+  ypos 545
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos -315
+  ypos 587
+ }
+ Grade {
+  blackpoint 0.1
+  whitepoint 0.3
+  gamma 3
+  black_clamp false
+  white_clamp true
+  name LumaMask
+  xpos -315
+  ypos 611
+ }
+set N24cf42d0 [stack 0]
+ Constant {
+  inputs 0
+  color {0.5 0.5 0.5 1}
+  name Constant1
+  xpos -574
+  ypos -81
+ }
+ Grain2 {
+  name Grain2_1
+  label "Kodak GT5274"
+  xpos -574
+  ypos 104
+  seed 1345
+  red_size 0.04
+  green_size 0.1
+  blue_size 0.9
+  red_i 0.9
+  green_i 0.76
+  blue_i 0.81
+  red_m 0.49
+  green_m 0.5
+  blue_m 1.55
+  black {0 0 0}
+  minimum {0 0 0}
+  maskgrain false
+ }
+ Dot {
+  name Dot9
+  xpos -540
+  ypos 181
+ }
+set N313a7560 [stack 0]
+ TimeOffset {
+  time_offset -1
+  name TimeOffset2
+  xpos -801
+  ypos 265
+ }
+push $N313a7560
+ TimeOffset {
+  time_offset 1
+  name TimeOffset1
+  xpos -798
+  ypos 178
+ }
+push $N313a7560
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0.5
+  name Merge1
+  xpos -748
+  ypos 202
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0.3333
+  name Merge2
+  xpos -748
+  ypos 292
+ }
+set N313a1f70 [stack 0]
+ TimeOffset {
+  time_offset 2
+  name TimeOffset6
+  xpos -831
+  ypos 541
+ }
+push $N313a1f70
+ TimeOffset {
+  time_offset -2
+  name TimeOffset5
+  xpos -827
+  ypos 479
+ }
+push $N313a1f70
+ TimeOffset {
+  time_offset -1
+  name TimeOffset3
+  xpos -828
+  ypos 427
+ }
+push $N313a1f70
+ TimeOffset {
+  time_offset 1
+  name TimeOffset4
+  xpos -828
+  ypos 366
+ }
+push $N313a1f70
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0.5
+  name Merge3
+  xpos -748
+  ypos 389
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0.3333
+  name Merge4
+  xpos -748
+  ypos 451
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0.25
+  name Merge5
+  xpos -748
+  ypos 503
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0.2
+  name Merge6
+  selected true
+  xpos -748
+  ypos 563
+ }
+push $N313a1f70
+push $N313a7560
+ Merge2 {
+  inputs 2
+  operation copy
+  name Deflick
+  xpos -574
+  ypos 292
+ }
+ Dot {
+  name Dot10
+  xpos -540
+  ypos 359
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0
+  name Deflick2
+  xpos -574
+  ypos 526
+ }
+ Grade {
+  blackpoint 0.6
+  whitepoint 0.4
+  black_clamp false
+  mix 0.5
+  name Intens
+  xpos -574
+  ypos 578
+ }
+set N44a45f50 [stack 0]
+ Dot {
+  name Dot4
+  xpos -540
+  ypos 653
+ }
+set N44a462c0 [stack 0]
+push $N44a462c0
+push $N24cf3bf0
+ Merge2 {
+  inputs 2
+  operation overlay
+  mix 0.2
+  name MainGrain
+  xpos -433
+  ypos 598
+ }
+ Merge2 {
+  inputs 2+1
+  operation overlay
+  maskChannelMask rgba.red
+  invert_mask true
+  mix 0.8
+  name DarkGrain
+  xpos -433
+  ypos 671
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix 0
+  name Mix
+  xpos -354
+  ypos 739
+ }
+push $N24cf42d0
+ Dot {
+  name Dot1
+  xpos -225
+  ypos 722
+ }
+ Dot {
+  name Dot8
+  xpos -225
+  ypos 782
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  name ShowLumaMask
+  xpos -354
+  ypos 779
+ }
+ Output {
+  name Output
+  xpos -354
+  ypos 871
+ }
+push $N44a45f50
+push 0
+ Viewer {
+  inputs 2
+  frame 87
+  input_number 1
+  input_process false
+  name Viewer1
+  xpos -464
+  ypos 528
+ }
+end_group

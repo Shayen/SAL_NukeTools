@@ -1,0 +1,299 @@
+#! C:/Program Files/Nuke10.5v4/nuke-10.5.4.dll -nx
+version 10.5 v4
+add_layer {reflect reflect.red reflect.green reflect.blue}
+Gizmo {
+inputs 2
+tile_color 0xaf9057ff
+label "\[value in]_\[value maskChannel]"
+addUserKnob {20 User l Repair}
+addUserKnob {41 in l Passes T Shuffle1.in}
+addUserKnob {6 View l View_Passes -STARTLINE}
+addUserKnob {6 LayerContactSheet -STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {41 blackpoint T Grade1.blackpoint}
+addUserKnob {41 whitepoint T Grade1.whitepoint}
+addUserKnob {41 black l lift T Grade1.black}
+addUserKnob {41 white l gain T Grade1.white}
+addUserKnob {41 multiply T Grade1.multiply}
+addUserKnob {41 add l offset T Grade1.add}
+addUserKnob {41 gamma T Grade1.gamma}
+addUserKnob {26 ""}
+addUserKnob {41 size l Blur_size T Blur1.size}
+addUserKnob {6 blackOutside -STARTLINE}
+addUserKnob {41 saturation T Saturation1.saturation}
+addUserKnob {26 RolloffContrast}
+addUserKnob {41 contrast T RolloffContrast1.contrast}
+addUserKnob {41 center T RolloffContrast1.center}
+addUserKnob {41 soft_clip l "soft clip" T RolloffContrast1.soft_clip}
+addUserKnob {26 "" l "  "}
+addUserKnob {41 reverse T Grade1.reverse}
+addUserKnob {41 black_clamp l "black clamp" -STARTLINE T Grade1.black_clamp}
+addUserKnob {41 white_clamp l "white clamp" -STARTLINE T Grade1.white_clamp}
+addUserKnob {4 Unpremult l "     (un)premult by" -STARTLINE M {none rgba.alpha "" "" "" "" "" "" "" "" "" "" ""}}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannel l "mask channel" T Keymix1.maskChannel}
+addUserKnob {6 Invert l invert -STARTLINE}
+addUserKnob {6 View_Mask l view_mask -STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {41 mix_1 l mix T Keymix1.mix}
+addUserKnob {26 Update l "" +STARTLINE T ": sam@meshfx"}
+}
+Input {
+inputs 0
+name Source
+xpos 0
+ypos -285
+}
+set Na0de0c00 [stack 0]
+Dot {
+name Dot3
+xpos 34
+ypos -238
+}
+set N8cda5c00 [stack 0]
+Dot {
+name Dot2
+xpos 34
+ypos -67
+}
+set N9e963800 [stack 0]
+Dot {
+name Dot10
+xpos -154
+ypos -67
+}
+Dot {
+name Dot11
+xpos -154
+ypos 589
+}
+Input {
+inputs 0
+name mask
+xpos 696
+ypos -314
+number 1
+addUserKnob {20 User}
+addUserKnob {6 Control l Control_Switch +STARTLINE}
+Control {{"\[exists parent.input1.disable]"}}
+}
+push $N8cda5c00
+Shuffle {
+in alpha
+name Shuffle2
+xpos 575
+ypos -242
+}
+Switch {
+inputs 2
+which {{parent.mask.Control}}
+name Switch2
+xpos 696
+ypos -242
+}
+Invert {
+channels alpha
+name Invert1
+xpos 696
+ypos 425
+disable {{1-parent.Invert}}
+}
+set C8cda5400 [stack 0]
+set N8cda5400 [stack 0]
+push $N9e963800
+Shuffle {
+in reflect
+name Shuffle1
+label "\n"
+xpos 0
+ypos 8
+}
+set N9e963400 [stack 0]
+Remove {
+operation keep
+channels rgba
+name Remove1
+xpos 391
+ypos 8
+}
+Unpremult {
+name Unpremult1
+xpos 391
+ypos 34
+disable {{1-Unpremult}}
+}
+set N9e962c00 [stack 0]
+Saturation {
+name Saturation1
+xpos 266
+ypos 175
+}
+Grade {
+name Grade1
+xpos 266
+ypos 212
+}
+RolloffContrast {
+soft_clip 0.5
+slope_mag_low1 0.5
+slope_mag_high2 0.5
+name RolloffContrast1
+xpos 266
+ypos 253
+}
+Crop {
+box {0 0 1280 720}
+crop false
+name blackOutside
+xpos 266
+ypos 317
+disable {{1-blackOutside}}
+}
+Blur {
+channels rgb
+name Blur1
+xpos 266
+ypos 364
+}
+push $N9e962c00
+Keymix {
+inputs 3
+invertMask {{1-parent.Invert1.disable}}
+name Keymix1
+xpos 391
+ypos 425
+}
+set N8d18d400 [stack 0]
+Premult {
+name Premult1
+xpos 391
+ypos 535
+disable {{1-Unpremult}}
+}
+push $N9e963800
+Dot {
+name Dot1
+xpos -66
+ypos 15
+}
+push $N9e963400
+Merge2 {
+inputs 2
+operation minus
+name Merge1
+xpos 0
+ypos 71
+}
+Merge2 {
+inputs 2
+operation plus
+bbox B
+name Merge2
+xpos 0
+ypos 535
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy2
+xpos 0
+ypos 579
+}
+set Na5308400 [stack 0]
+Viewer {
+frame_range 1-121
+fps 25
+name Viewer1
+xpos -97
+ypos 1061
+}
+push $Na0de0c00
+Dot {
+name Dot9
+xpos 529
+ypos -281
+}
+Dot {
+name Dot7
+xpos 529
+ypos 495
+}
+push $N8cda5400
+Copy {
+inputs 2
+from0 {{{parent.Keymix1.maskChannel}}}
+to0 rgba.alpha
+name Copy1
+xpos 696
+ypos 485
+}
+clone $C8cda5400 {
+xpos 696
+ypos 533
+selected false
+}
+Shuffle {
+in alpha
+name Shuffle3
+label "\[value in]"
+xpos 696
+ypos 585
+}
+Dot {
+name Dot4
+xpos 730
+ypos 828
+}
+push $Na0de0c00
+LayerContactSheet {
+showLayerNames true
+name LayerContactSheet1
+xpos -272
+ypos -285
+}
+Dot {
+name Dot6
+xpos -238
+ypos 761
+}
+push $N8d18d400
+Dot {
+name Dot5
+xpos 210
+ypos 435
+}
+push $Na5308400
+Dot {
+name Dot8
+xpos 34
+ypos 676
+}
+Switch {
+inputs 2
+which {{parent.View}}
+name Switch1
+xpos 176
+ypos 672
+}
+Switch {
+inputs 2
+which {{LayerContactSheet}}
+name Switch4
+xpos 176
+ypos 757
+}
+Switch {
+inputs 2
+which {{View_Mask}}
+name Switch3
+xpos 176
+ypos 824
+}
+Output {
+name Output1
+selected true
+xpos 176
+ypos 876
+}
+end_group

@@ -1,0 +1,271 @@
+#! C:/Program Files/Nuke6.3v4/Nuke6.3.exe -nx
+version 6.3 v4
+Gizmo {
+ inputs 2
+ tile_color 0xff7b2cff
+ note_font Verdana
+ mapsize {0.15 0.15}
+ addUserKnob {20 ChromaSmear l "Chroma Smear"}
+ addUserKnob {26 ""}
+ addUserKnob {7 abberation R -5 5}
+ abberation 3
+ addUserKnob {26 ""}
+ addUserKnob {26 Translate l Chroma T Translate}
+ addUserKnob {7 TranslateX l x t "Translate X" R -100 100}
+ TranslateX 20
+ addUserKnob {7 TranslateY l y t "Translate Y" R -100 100}
+ TranslateY 20
+ addUserKnob {26 ""}
+ addUserKnob {41 rotate T Transform1.rotate}
+ addUserKnob {41 scale T Transform1.scale}
+ addUserKnob {7 fade t "Radial Opacity"}
+ fade 0.3
+ addUserKnob {26 ""}
+ addUserKnob {4 Mask l "Mask Use" M {None Luma Alpha}}
+ Mask Alpha
+ addUserKnob {7 Mask_softness l "Radial Mask"}
+ addUserKnob {26 ""}
+ addUserKnob {26 by -STARTLINE T "VFX The Post BKK"}
+}
+ Input {
+  inputs 0
+  name Mask
+  xpos 286
+  ypos -220
+  number 1
+ }
+ Dot {
+  name Dot1
+  xpos 320
+  ypos -180
+ }
+set N91e9250 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Alpha
+  xpos 286
+  ypos -132
+ }
+push $N91e9250
+ Keyer {
+  operation "luminance key"
+  name Keyer1
+  xpos 381
+  ypos -189
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Luma
+  xpos 381
+  ypos -132
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  name none
+  xpos 494
+  ypos -108
+ }
+ Switch {
+  inputs 3
+  which {{Mask i}}
+  name SwitchMask
+  xpos 286
+  ypos -80
+ }
+ Invert {
+  name Invert2
+  xpos 286
+  ypos -35
+ }
+ Radial {
+  inputs 0
+  cliptype none
+  invert true
+  opacity {{fade i}}
+  area {{curve i} {curve i} {input.width i} {input.height i}}
+  softness {{parent.Mask_softness*-1+1+.5 i}}
+  plinear true
+  name Radial1
+  xpos 148
+  ypos -53
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge5
+  xpos 148
+  ypos -29
+ }
+ Input {
+  inputs 0
+  name Source
+  xpos -210
+  ypos -316
+ }
+set N91eabd0 [stack 0]
+ Remove {
+  name Remove1
+  xpos 31
+  ypos -322
+ }
+ AdjBBox {
+  numpixels {{width/4 i} {width/4 i}}
+  name AdjBBox1
+  xpos 31
+  ypos -200
+ }
+ Expression {
+  expr0 x
+  expr1 y
+  name Expression1
+  xpos 31
+  ypos -176
+ }
+set N91eb560 [stack 0]
+ Dot {
+  name Dot2
+  xpos -79
+  ypos -173
+ }
+ Transform {
+  translate {{parent.TranslateX i} {parent.TranslateY i}}
+  rotate 10
+  center {{input.width/2 i} {input.height/2 i}}
+  black_outside false
+  name Transform1
+  xpos -113
+  ypos -152
+ }
+push $N91eb560
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge1
+  xpos 31
+  ypos -152
+ }
+ Invert {
+  channels rgba
+  name Invert1
+  xpos 31
+  ypos -128
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge2
+  xpos 31
+  ypos 21
+ }
+push $N91eabd0
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy1
+  xpos -210
+  ypos 10
+ }
+set N966ecf0 [stack 0]
+ Shuffle {
+  red black
+  green black
+  name Shuffle3
+  xpos -119
+  ypos 88
+ }
+ VectorBlur {
+  channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{-.5*abberation*.8 i}}
+  name VectorBlur3
+  xpos -119
+  ypos 112
+ }
+ Expression {
+  expr3 a*0.114
+  name Expression4
+  xpos -119
+  ypos 146
+ }
+push $N966ecf0
+ Shuffle {
+  red black
+  blue black
+  name Shuffle2
+  xpos -210
+  ypos 89
+ }
+ VectorBlur {
+  channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{-.5*abberation*.6 i}}
+  name VectorBlur2
+  xpos -210
+  ypos 113
+ }
+ Expression {
+  expr3 a*0.587
+  name Expression3
+  xpos -210
+  ypos 147
+ }
+push $N966ecf0
+ Shuffle {
+  green black
+  blue black
+  name Shuffle1
+  xpos -297
+  ypos 89
+ }
+ VectorBlur {
+  channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{-.5*abberation*.4 i}}
+  name VectorBlur1
+  xpos -297
+  ypos 113
+ }
+ Expression {
+  expr3 a*0.299
+  name Expression2
+  xpos -297
+  ypos 147
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge3
+  xpos -297
+  ypos 246
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos -119
+  ypos 246
+ }
+ Crop {
+  box {{curve i} {curve i} {input.width i} {input.height i}}
+  name Crop1
+  selected true
+  xpos -119
+  ypos 293
+ }
+ Output {
+  name Output1
+  xpos -119
+  ypos 391
+ }
+end_group
